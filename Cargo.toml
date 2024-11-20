@@ -1,10 +1,10 @@
 [package]
-name = "hello_world"
+name = "asev-rust"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-axum = { version = "0.7.9", features = ["multipart"] }
+axum = { version = "0.7.9", features = ["multipart", "macros"] }
 tokio = { version = "1.41.1", features = ["full"] }
 tower = "0.5.1"
 tower-http = { version = "0.5", features = ["fs"] }
@@ -12,3 +12,7 @@ hyper = { version = "1.5.0", features = ["full"] }
 tera = "1.19"
 serde = { version = "1.0", features = ["derive"] }
 image = "0.24"
+shuttle-axum = "0.49.0"
+shuttle-runtime = "0.49.0"
+uuid = { version = "1.7.0", features = ["v4"] }
+anyhow = "1.0"

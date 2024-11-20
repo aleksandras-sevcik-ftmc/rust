@@ -1,4 +1,3 @@
-// src/routes/mod.rs
 /**
 * Routes module configuration
 * Responsibilities:
@@ -6,17 +5,24 @@
 * - Create and configure main Router
 * - Manage route hierarchies
 */
-mod ascii;           // ASCII art route handling module
-mod static_files;    // Static file serving module
+mod ascii; // ASCII art route handling module
+mod static_files; // Static file serving module
 
 // Re-export all public items from ascii module
 pub use ascii::*;
-// Import Router from axum framework    
 use axum::Router;
+use std::sync::Arc;
 
 // Public function to create and configure main application router
 pub fn create_router() -> Router {
-   Router::new()                           // Create new router
-       .merge(ascii_routes())             // Add ASCII routes
-       .merge(static_files::static_routes()) // Add static file routes
+    // Create shared state
+    let state = Arc::new(AppState::new());
+
+    // Create base router with ASCII routes and state
+    let app = Router::new()
+        .merge(ascii_routes())
+        .merge(static_files::static_routes());
+
+    // Apply state to the entire router
+    app.with_state(state)
 }

@@ -9,9 +9,8 @@
 */
 // Import serialization traits and error handling
 use serde::{Deserialize, Serialize};
-use std::error::Error;
+use anyhow::Error as AnyhowError;
 
-// Define AsciiArt struct with serialization support
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AsciiArt {
     pub content: String,   // ASCII art content
@@ -21,20 +20,19 @@ pub struct AsciiArt {
 }
 
 impl AsciiArt {
-    // Constructor with validation
-    pub fn new(content: String, width: usize, height: usize) -> Result<Self, Box<dyn Error>> {
+    // Changed return type to use AnyhowError
+    pub fn new(content: String, width: usize, height: usize) -> Result<Self, AnyhowError> {
         if width * height == 0 {
-            // Check for valid dimensions
-            return Err("Invalid dimensions".into());
+            // Use anyhow's bail! macro for early returns with errors
+            anyhow::bail!("Invalid dimensions");
         }
 
         let ascii = Self {
-            // Create instance
             content,
             width,
             height,
             char_count: width * height,
         };
-        Ok(ascii) // Return if valid
+        Ok(ascii)
     }
 }

@@ -1,4 +1,3 @@
-// src/routes/static_files.rs
 /**
 * Static file serving
 * Responsibilities:
@@ -7,15 +6,16 @@
 * - Handle static file routes
 */
 
-// Import required modules from axum and tower-http
-use axum::Router;  // For creating web routes
-use tower_http::services::ServeDir; // For serving static files
+use axum::Router;
+use tower_http::services::ServeDir;
+use std::sync::Arc;
+use crate::routes::ascii::AppState;  // Import AppState type
 
-// Function that creates and returns a Router for static file serving
-pub fn static_routes() -> Router {
-   Router::new()                   // Create new router instance
-       .nest_service(              // Add nested service route
-           "/static",              // URL path for static files
-           ServeDir::new("static") // Serve files from "static" directory
-       )
+// Updated to use same state type as ASCII routes
+pub fn static_routes() -> Router<Arc<AppState>> {
+    Router::new()
+        .nest_service(
+            "/static",
+            ServeDir::new("static")
+        )
 }

@@ -1,4 +1,5 @@
 // src/main.rs
+mod models;
 /**
 * Main application entry point
 * Responsibilities:
@@ -9,17 +10,11 @@
 mod routes;
 mod services;
 mod templates;
-mod models;
 
 use routes::create_router;
 
-#[tokio::main]
-async fn main() {
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
     let app = create_router();
-    let addr = "127.0.0.1:8000";
-
-    println!("Server running on http://{}", addr);
-    axum::serve(tokio::net::TcpListener::bind(addr).await.unwrap(), app)
-        .await
-        .unwrap();
+    Ok(app.into())
 }
