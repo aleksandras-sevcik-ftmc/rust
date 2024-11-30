@@ -1,21 +1,20 @@
-/**
-* Static file serving
-* Responsibilities:
-* - Serve static assets (JS, CSS)
-* - Configure caching
-* - Handle static file routes
-*/
-
-use axum::Router;
+use axum::{
+    Router,
+    routing::get_service,
+};
 use tower_http::services::ServeDir;
-use std::sync::Arc;
-use crate::routes::ascii::AppState;  // Import AppState type
+use crate::routes::cpu_routes::AppState;
 
-// Updated to use same state type as ASCII routes
-pub fn static_routes() -> Router<Arc<AppState>> {
+pub fn static_routes() -> Router<AppState> {
     Router::new()
         .nest_service(
             "/static",
-            ServeDir::new("static")
+            get_service(ServeDir::new("static"))
+                .handle_error(|error| async move {
+                    (
+                        axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                        format!("Unhandled internal error: {}", error),
+                    )
+                }),
         )
 }

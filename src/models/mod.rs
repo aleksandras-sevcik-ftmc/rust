@@ -1,1 +1,1 @@
-pub mod ascii_art;
+pub mod cpu_model;

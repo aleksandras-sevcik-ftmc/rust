@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>CPU Information</h2>
+            </div>
+            <div class="card-body">
+                <div id="cpu-data" class="system-output"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateCpuInfo() {
+    fetch('/api/cpu')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('cpu-data').textContent = 
+                `CPU Usage: ${data.usage.toFixed(1)}%\n` +
+                `Cores: ${data.cores}\n` +
+                `Frequency: ${data.frequency} MHz\n` +
+                `Brand: ${data.brand}`;
+        });
+}
+
+updateCpuInfo();
+setInterval(updateCpuInfo, 1000);
+</script>
+{% endblock %}
